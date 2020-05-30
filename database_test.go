@@ -26,8 +26,6 @@ var port = flag.String("port", "", "database port")
 var user = flag.String("user", "", "database user")
 var password = flag.String("password", "", "database password")
 var database = flag.String("database", "", "default database")
-var sslmode = flag.String("sslmode", "", "ssl mode")
-var sslrootcert = flag.String("sslrootcert", "", "ssl root certificate")
 
 var db *Database
 var testObject *TestItem
@@ -41,8 +39,6 @@ func TestMain(m *testing.M) {
 	dsnString += fmt.Sprintf("%s=%s ", "user", *user)
 	dsnString += fmt.Sprintf("%s=%s ", "password", *password)
 	dsnString += fmt.Sprintf("%s=%s ", "database", *database)
-	dsnString += fmt.Sprintf("%s=%s ", "sslmode", *sslmode)
-	dsnString += fmt.Sprintf("%s=%s", "sslrootcert", *sslrootcert)
 
 	db, err = NewDatabase(dsnString)
 	if err != nil {

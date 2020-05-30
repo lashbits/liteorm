@@ -1,0 +1,17 @@
+image: golang:1.14-buster
+
+variables:
+  # variables picked up directly by the postgres docker image
+  POSTGRES_USER: "testuser"
+  POSTGRES_PASSWORD: "testpassword"
+  POSTGRES_DB: "testdb"
+
+services:
+  # configuration of the service based on
+  # https://docs.gitlab.com/ee/ci/services/postgres.html
+  - postgres:12-alpine
+
+# the main job which executes the go test command
+run_tests:
+  script:
+    - go test -v . -host postgres -port 5432 -user "$POSTGRES_USER" -password "$POSTGRES_PASSWORD" -database "$POSTGRES_DB"
