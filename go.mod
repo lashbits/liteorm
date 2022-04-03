@@ -1,6 +1,6 @@
-module lashbits.tech/liteorm
+module github.com/lashbits/liteorm
 
-go 1.14
+go 1.16
 
 require (
 	github.com/jackc/pgx/v4 v4.6.0
