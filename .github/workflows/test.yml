@@ -1,0 +1,41 @@
+name: "Test"
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    container: golang:1.16-buster
+
+    services:
+      postgres:
+        image: postgres:12-alpine
+        env:
+          POSTGRES_USER: "testuser"
+          POSTGRES_PASSWORD: "testpassword"
+          POSTGRES_DB: "testdb"
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        path: liteorm
+
+    - name: Run the unit tests
+      env:
+        POSTGRES_USER: "testuser"
+        POSTGRES_PASSWORD: "testpassword"
+        POSTGRES_DB: "testdb"
+      run: |
+        cd liteorm
+        go test -v .                      \
+          -host postgres                  \
+          -port 5432                      \
+          -user "$POSTGRES_USER"          \
+          -password "$POSTGRES_PASSWORD"  \
+          -database "$POSTGRES_DB"
