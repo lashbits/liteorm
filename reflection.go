@@ -10,7 +10,7 @@ import (
 
 // getObjectValue receives either a struct or pointer to struct type as argument, and returns its reflect.Value. If
 // pointer, the value is dereferenced.
-func getObjectValue(arg interface{}) (reflect.Value, error) {
+func getObjectValue(arg any) (reflect.Value, error) {
 	argv := reflect.ValueOf(arg)
 
 	if argv.Kind() == reflect.Ptr {
@@ -26,7 +26,7 @@ func getObjectValue(arg interface{}) (reflect.Value, error) {
 
 // getObjectType receives either a struct or pointer to struct type as argument, and returns its reflect.Type. If
 // pointer, the value is dereferenced.
-func getObjectType(arg interface{}) (reflect.Type, error) {
+func getObjectType(arg any) (reflect.Type, error) {
 	argt := reflect.TypeOf(arg)
 
 	if argt.Kind() == reflect.Ptr {
@@ -40,9 +40,9 @@ func getObjectType(arg interface{}) (reflect.Type, error) {
 	return argt, nil
 }
 
-// getSliceValue receives a pointer to a slice type as argument (of type interface{}) and returns the value (of type
+// getSliceValue receives a pointer to a slice type as argument (of type any) and returns the value (of type
 // reflect.Value).
-func getSliceValue(arg interface{}) (reflect.Value, error) {
+func getSliceValue(arg any) (reflect.Value, error) {
 	if reflect.TypeOf(arg).Kind() == reflect.Ptr {
 		// dereference the pointer to get the slice
 		slice := reflect.ValueOf(arg).Elem()
@@ -58,7 +58,7 @@ func getSliceValue(arg interface{}) (reflect.Value, error) {
 }
 
 // getSliceElemType receives a pointer to a slice type as argument and returns the type of the slice elements.
-func getSliceElemType(arg interface{}) (reflect.Type, error) {
+func getSliceElemType(arg any) (reflect.Type, error) {
 	if reflect.TypeOf(arg).Kind() != reflect.Ptr {
 		return nil, errors.New("provided argument is not a pointer type")
 	}
@@ -136,7 +136,7 @@ func getLengthTag(field reflect.StructField) (int, error) {
 }
 
 // setIDValue sets the ID field of the object received as argument.
-func setIDValue(arg interface{}, value int64) error {
+func setIDValue(arg any, value int64) error {
 	argv, err := getObjectValue(arg)
 	if err != nil {
 		return err
@@ -152,7 +152,7 @@ func setIDValue(arg interface{}, value int64) error {
 }
 
 // getIDValue gets the ID field of the object received as argument.
-func getIDValue(arg interface{}) (int64, error) {
+func getIDValue(arg any) (int64, error) {
 	argv, err := getObjectValue(arg)
 	if err != nil {
 		return -1, err
@@ -172,10 +172,10 @@ func BuildTableName(t reflect.Type) string {
 	return fmt.Sprintf("%ss", strings.ToLower(t.Name()))
 }
 
-// buildSliceFromFields generates an slice of type []interface{}, where each element is of the same type as the fields of
+// buildSliceFromFields generates an slice of type []any, where each element is of the same type as the fields of
 // the first argument.
-func buildSliceFromFields(arg reflect.Type) []interface{} {
-	slice := make([]interface{}, arg.NumField())
+func buildSliceFromFields(arg reflect.Type) []any {
+	slice := make([]any, arg.NumField())
 	for i := 0; i < arg.NumField(); i++ {
 		// in the line below, we are creating a new object of the type of the field; this is a pointer stored as a
 		// reflect.Value object; we then use the .Interface() method to obtain the pointer to the newly created object
@@ -185,7 +185,7 @@ func buildSliceFromFields(arg reflect.Type) []interface{} {
 }
 
 // setObjectFields sets the values for each field of the object passed as first argument.
-func setObjectFields(arg interface{}, values ...interface{}) error {
+func setObjectFields(arg any, values ...any) error {
 	argv, err := getObjectValue(arg)
 	if err != nil {
 		return err
@@ -196,7 +196,7 @@ func setObjectFields(arg interface{}, values ...interface{}) error {
 	}
 
 	for i := 0; i < argv.NumField(); i++ {
-		// in the line below, we are taking one interface{} which is actually a pointer to a specific object
+		// in the line below, we are taking one any which is actually a pointer to a specific object
 		// and turning that into a reflect.Value object via reflect.ValueOf; afterwards, the .Elem() method
 		// is called to dereference the pointer and get the underlying value
 		argv.Field(i).Set(reflect.ValueOf(values[i]).Elem())

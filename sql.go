@@ -109,13 +109,13 @@ func buildUpdateStatement(argt reflect.Type, clauses string, nextIdx int) (strin
 	return fmt.Sprintf("update %s set %s %s;", tableName, set, clauses), nextIdx
 }
 
-func buildStatementValues(arg interface{}) ([]interface{}, error) {
+func buildStatementValues(arg any) ([]any, error) {
 	argv, err := getObjectValue(arg)
 	if err != nil {
 		return nil, err
 	}
 
-	values := make([]interface{}, 0)
+	values := make([]any, 0)
 	for i := 0; i < argv.Type().NumField(); i++ {
 		field := argv.Type().Field(i)
 		if field.Name == "ID" {

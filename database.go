@@ -54,7 +54,7 @@ func (db *Database) CreateTable(t reflect.Type, dropExisting bool) error {
 	return nil
 }
 
-func (db *Database) Insert(arg interface{}) error {
+func (db *Database) Insert(arg any) error {
 	var lastID int64
 
 	argt, err := getObjectType(arg)
@@ -82,7 +82,7 @@ func (db *Database) Insert(arg interface{}) error {
 	return nil
 }
 
-func (db *Database) SelectOne(arg interface{}, clauses string, args ...interface{}) error {
+func (db *Database) SelectOne(arg any, clauses string, args ...any) error {
 	argt, err := getObjectType(arg)
 	if err != nil {
 		return errors.Wrap(err, "could not select object")
@@ -107,7 +107,7 @@ func (db *Database) SelectOne(arg interface{}, clauses string, args ...interface
 	return nil
 }
 
-func (db *Database) Select(t reflect.Type, clauses string, args ...interface{}) (interface{}, error) {
+func (db *Database) Select(t reflect.Type, clauses string, args ...any) (any, error) {
 	errmsg := fmt.Sprintf("could not select objects of type %s", t.Name())
 
 	statement := buildSelectStatement(t, clauses)
@@ -138,7 +138,7 @@ func (db *Database) Select(t reflect.Type, clauses string, args ...interface{}) 
 	return result.Interface(), nil
 }
 
-func (db *Database) UpdateOne(arg interface{}) error {
+func (db *Database) UpdateOne(arg any) error {
 	argt, err := getObjectType(arg)
 	if err != nil {
 		return errors.Wrap(err, "could not update object")
@@ -157,7 +157,7 @@ func (db *Database) UpdateOne(arg interface{}) error {
 		return errors.Wrap(err, errmsg)
 	}
 
-	values = append([]interface{}{id}, values...)
+	values = append([]any{id}, values...)
 
 	commandTag, err := db.Conn.Exec(context.Background(), statement, values...)
 	if err != nil {
@@ -171,7 +171,7 @@ func (db *Database) UpdateOne(arg interface{}) error {
 	return nil
 }
 
-func (db *Database) Delete(t reflect.Type, clauses string, args ...interface{}) (int64, error) {
+func (db *Database) Delete(t reflect.Type, clauses string, args ...any) (int64, error) {
 	errmsg := fmt.Sprintf("could not delete objects of type %s", t.Name())
 
 	statement := buildDeleteStatement(t, clauses)
