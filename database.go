@@ -58,10 +58,6 @@ func (db *Database) TableExists(t reflect.Type) (bool, error) {
 	statement = buildTableExistsStatement(t, "public")
 	row := db.Conn.QueryRow(context.Background(), statement)
 
-	if row.Next() != true {
-		return false, fmt.Errorf("unexpected result received from the database")
-	}
-
 	var exists bool
 	if err := row.Scan(&exists); err != nil {
 		return false, errors.Wrap(err, "unexpected result received from the database")
