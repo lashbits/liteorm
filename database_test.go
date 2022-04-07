@@ -61,6 +61,17 @@ func TestCreateTable(t *testing.T) {
 	}
 }
 
+func TestTableExists(t *testing.T) {
+	exists, err := db.TableExists(TestItemType)
+	if err != nil {
+		t.Errorf(err.Error())
+	}
+
+	if exists != true {
+		t.Errorf("table does not exist, but it should")
+	}
+}
+
 func testEquality(a, b TestItem, t *testing.T) {
 	if a.ID != b.ID {
 		t.Errorf("mismatch in the ID field of the selected object")

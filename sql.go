@@ -132,3 +132,13 @@ func buildDeleteStatement(argt reflect.Type, clauses string) string {
 	tableName := BuildTableName(argt)
 	return fmt.Sprintf("delete from %s %s;", tableName, clauses)
 }
+
+func buildTableExistsStatement(argt reflect.Type, schemaName string) string {
+	tableName := BuildTableName(argt)
+	return fmt.Sprintf(`
+        select exists (
+            select from information_schema.tables
+            where table_schema = %s
+            and table_name = %s
+        );`, schemaName, tableName)
+}
