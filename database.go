@@ -55,7 +55,7 @@ func (db *Database) CreateTable(t reflect.Type, dropExisting bool) error {
 }
 
 func (db *Database) TableExists(t reflect.Type) (bool, error) {
-	statement = buildTableExistsStatement(t, "public")
+	statement := buildTableExistsStatement(t, "public")
 	row := db.Conn.QueryRow(context.Background(), statement)
 
 	var exists bool
