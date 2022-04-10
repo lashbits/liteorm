@@ -95,23 +95,23 @@ func testEquality(a, b TestItem, t *testing.T) {
 		t.Errorf("mismatch in the BLOBColumn field of the selected object")
 	}
 
-    if a.Float32Column != b.Float32Column {
+	if a.Float32Column != b.Float32Column {
 		t.Errorf("mismatch in the Float32Column field of the selected object")
-    }
+	}
 
-    if a.Float64Column != b.Float64Column {
+	if a.Float64Column != b.Float64Column {
 		t.Errorf("mismatch in the Float32Column field of the selected object")
-    }
+	}
 }
 
 func TestInsert(t *testing.T) {
 	testObject = &TestItem{
-		StringColumn: "lashbits.tech",
-		IntColumn:    1337,
-		TimeColumn:   time.Now().UTC(),
-		BLOBColumn:   []byte{0x13, 0x37},
-		Float32:      0.01,
-		Float64:      0.000001,
+		StringColumn:  "lashbits.tech",
+		IntColumn:     1337,
+		TimeColumn:    time.Now().UTC(),
+		BLOBColumn:    []byte{0x13, 0x37},
+		Float32Column: 0.01,
+		Float64Column: 0.000001,
 	}
 
 	err := db.Insert(testObject)
@@ -120,12 +120,12 @@ func TestInsert(t *testing.T) {
 	}
 
 	anotherTestObject := &TestItem{
-		StringColumn: "lashbits.tech",
-		IntColumn:    1337,
-		TimeColumn:   time.Now().UTC(),
-		BLOBColumn:   []byte{0x13, 0x37},
-		Float32:      0.01,
-		Float64:      0.000001,
+		StringColumn:  "lashbits.tech",
+		IntColumn:     1337,
+		TimeColumn:    time.Now().UTC(),
+		BLOBColumn:    []byte{0x13, 0x37},
+		Float32Column: 0.01,
+		Float64Column: 0.000001,
 	}
 
 	err = db.Insert(anotherTestObject)
