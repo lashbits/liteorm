@@ -12,11 +12,13 @@ import (
 )
 
 type TestItem struct {
-	ID           int64  `pgsql:"primary key"`
-	StringColumn string `pglen:"25"`
-	IntColumn    int
-	TimeColumn   time.Time
-	BLOBColumn   []byte
+	ID            int64  `pgsql:"primary key"`
+	StringColumn  string `pglen:"25"`
+	IntColumn     int
+	TimeColumn    time.Time
+	BLOBColumn    []byte
+	Float32Column float32
+	Float64Column float64
 }
 
 var TestItemType reflect.Type = reflect.TypeOf((*TestItem)(nil)).Elem()
@@ -92,6 +94,14 @@ func testEquality(a, b TestItem, t *testing.T) {
 	if !bytes.Equal(a.BLOBColumn, b.BLOBColumn) {
 		t.Errorf("mismatch in the BLOBColumn field of the selected object")
 	}
+
+    if a.Float32Column != b.Float32Column {
+		t.Errorf("mismatch in the Float32Column field of the selected object")
+    }
+
+    if a.Float64Column != b.Float64Column {
+		t.Errorf("mismatch in the Float32Column field of the selected object")
+    }
 }
 
 func TestInsert(t *testing.T) {
@@ -100,6 +110,8 @@ func TestInsert(t *testing.T) {
 		IntColumn:    1337,
 		TimeColumn:   time.Now().UTC(),
 		BLOBColumn:   []byte{0x13, 0x37},
+		Float32:      0.01,
+		Float64:      0.000001,
 	}
 
 	err := db.Insert(testObject)
@@ -112,6 +124,8 @@ func TestInsert(t *testing.T) {
 		IntColumn:    1337,
 		TimeColumn:   time.Now().UTC(),
 		BLOBColumn:   []byte{0x13, 0x37},
+		Float32:      0.01,
+		Float64:      0.000001,
 	}
 
 	err = db.Insert(anotherTestObject)

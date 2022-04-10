@@ -89,6 +89,12 @@ func mapColumnType(field reflect.StructField) (string, error) {
 	case reflect.Int64:
 		return "bigint", nil
 
+	case reflect.Float32:
+		return "float4", nil
+
+	case reflect.Float64:
+		return "float8", nil
+
 	case reflect.String:
 		var lenTag int
 		lenTag, err := getLengthTag(field)
