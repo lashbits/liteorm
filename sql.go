@@ -138,7 +138,7 @@ func buildTableExistsStatement(argt reflect.Type, schemaName string) string {
 	return fmt.Sprintf(`
         select exists (
             select from information_schema.tables
-            where table_schema = %s
-            and table_name = %s
+            where table_schema = '%s'
+            and table_name = '%s'
         );`, schemaName, tableName)
 }
