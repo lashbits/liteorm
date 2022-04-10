@@ -169,6 +169,17 @@ func TestSelect(t *testing.T) {
 	}
 
 	testEquality(*testObject, result[0], t)
+
+	// the following select should return an empty array
+	if resultif, err := db.Select(TestItemType, "where id = $1", 200); err == nil {
+		result = resultif.([]TestItem)
+	} else {
+		t.Errorf("could not select objects - %s", err.Error())
+	}
+
+	if len(result) != 0 {
+		t.Errorf("incorrect amount of objects selected - %d instead of 0", len(result))
+	}
 }
 
 func TestUpdate(t *testing.T) {
